@@ -3,8 +3,19 @@ const toDoForm = document.querySelector(".js-toDoForm"),
     toDoList = document.querySelector(".js-toDoList");
 
 const TODOS_LS = "toDos";
-const toDos = [];
+let toDos = [];
 
+function deleteToDo(event){
+    const btn = event.target;
+    const li = btn.parentNode;
+    toDoList.removeChild(li);
+    const cleanToDos = toDos.filter(function(toDo){
+        console.log(toDo.id,li.id);
+        return toDo.id!==parseInt(li.id);
+    }); //filterFn이 체크가 된 아이템들의 array를 준다.
+    toDos = cleanToDos
+    saveToDos();
+}
 function saveToDos(){
     localStorage.setItem(TODOS_LS,JSON.stringify(toDos)); // Object -> string
 }
@@ -14,6 +25,7 @@ function paintToDo(text){
     const span = document.createElement("span");
     const newId = toDos.length+1
     delBtn.innerText="Θ "
+    delBtn.addEventListener("click",deleteToDo);
     span.innerText=text;
     li.appendChild(delBtn); // 버튼을 li에 넣고
     li.appendChild(span); // span을 li에 넣고
